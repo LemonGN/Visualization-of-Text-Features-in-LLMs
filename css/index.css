@@ -1,0 +1,247 @@
+:root {
+  --color: black;
+  --rw: 40;
+}
+.family1 {
+  font-family: Blueaka;
+}
+.point {
+  cursor: pointer;
+}
+.mainSvg {
+  position: fixed;
+  top: 0;
+}
+.form-group label {
+  font-size: calc(25vw/var(--rw));
+}
+.fangkuang {
+  cursor: col-resize;
+  scale: 0.1;
+}
+p,
+span {
+  margin: calc(10vw/var(--rw));
+  margin-left: 0;
+  line-height: calc(33vw/var(--rw));
+  font-size: calc(23vw/var(--rw));
+}
+.buttons {
+  background-color: rgba(255, 255, 255, 0.538);
+  display: flex;
+  border-radius: calc(7vw/var(--rw));
+  padding: calc(6vw/var(--rw));
+  flex-wrap: wrap;
+}
+.buttons button {
+  background-color: #fff;
+  border-radius: calc(7vw/var(--rw));
+  margin: calc(3vw/var(--rw));
+  border: calc(2vw/var(--rw)) solid #28506e;
+  padding-left: calc(20vw/var(--rw));
+  padding-right: calc(20vw/var(--rw));
+  font-size: calc(25vw/var(--rw));
+}
+.buttons button.active,
+.buttons button:hover {
+  background-color: #28506e;
+  color: #fff;
+}
+.legend {
+  width: 100%;
+  padding: calc(7vw/var(--rw));
+}
+.legend li {
+  margin: calc(10vw/var(--rw));
+  display: flex;
+  align-items: center;
+}
+.legend li .colorBox {
+  width: calc(30vw/var(--rw));
+  height: calc(20vw/var(--rw));
+}
+.legend li .pointBox {
+  background-color: #28506e;
+  border-radius: 50%;
+}
+.legend li .txt {
+  line-height: calc(20vw/var(--rw));
+  font-size: calc(20vw/var(--rw));
+  margin-left: calc(30vw/var(--rw));
+}
+.innerOverview {
+  height: calc(230vw/var(--rw));
+  width: 100%;
+  background-color: black;
+  overflow: hidden;
+}
+#app {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color);
+  position: relative;
+  transition: all 0.3s;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#app .right {
+  position: absolute;
+  top: calc(20vw/var(--rw));
+  right: calc(20vw/var(--rw));
+  width: calc(550vw/var(--rw));
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff21;
+  border-radius: calc(7vw/var(--rw));
+  align-items: center;
+}
+#app .left {
+  position: absolute;
+  top: calc(20vw/var(--rw));
+  left: calc(20vw/var(--rw));
+  width: calc(550vw/var(--rw));
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff21;
+  border-radius: calc(7vw/var(--rw));
+  align-items: center;
+}
+#app .box {
+  cursor: pointer;
+  margin: calc(10vw/var(--rw));
+  transition: all 0.3s;
+  width: calc(500vw/var(--rw));
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.505);
+  padding: calc(12vw/var(--rw));
+  border-radius: calc(7vw/var(--rw));
+}
+#app .box.card {
+  transition: all 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(540vw/var(--rw));
+}
+#app .box .whiteBorder {
+  transition: all 0.3s;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: calc(7vw/var(--rw));
+  padding: calc(7vw/var(--rw));
+}
+#app .box .whiteBorder .blueBorder {
+  transition: all 0.3s;
+  border: calc(5vw/var(--rw)) solid #28506e;
+  border-radius: calc(7vw/var(--rw));
+  padding: calc(7vw/var(--rw));
+}
+#app .box .whiteBorder .blueBorder .title {
+  width: 100%;
+  height: 100%;
+  background-color: #28506e;
+  border-radius: calc(7vw/var(--rw));
+  color: white;
+  text-align: center;
+  font-size: calc(24vw/var(--rw));
+  transition: all 0.3s;
+}
+#app .box .whiteBorder .blueBorder .content {
+  border-radius: calc(7vw/var(--rw));
+  padding: calc(10vw/var(--rw));
+  background-color: #e7f1f7;
+  transition: all 0.3s;
+}
+#app .box .whiteBorder .blueBorder .content.blackBGC {
+  border-radius: 0;
+  background-color: black;
+}
+#app .box .whiteBorder .blueBorder .content li {
+  font-size: calc(23vw/var(--rw));
+}
+.form-control {
+  font-size: calc(20vw/var(--rw));
+  height: calc(32vw/var(--rw));
+}
+text.title {
+  font-size: calc(26vw/var(--rw));
+}
+.right {
+  overflow: visible;
+}
+.right * {
+  overflow: visible;
+}
+.txtAnalyse .base.active svg {
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  scale: 2;
+  transform: translate(-25%, 0);
+  border: calc(5vw/var(--rw)) solid #28506E;
+}
+.buttons {
+  position: relative;
+}
+.card p:not(.textTitle),
+.card span {
+  margin: 0;
+  line-height: calc(20vw/var(--rw));
+  font-size: calc(19vw/var(--rw));
+}
+.wordFrequency ul {
+  height: calc(200vw/var(--rw));
+  overflow-y: auto;
+  /*滚动条里面轨道*/
+  /*定义滚动条整体的样式*/
+  /*滚动条的样式*/
+}
+.wordFrequency ul li {
+  width: calc(380vw/var(--rw));
+  margin-top: calc(6vw/var(--rw));
+  display: flex;
+  border-bottom: 1px solid #000;
+}
+.wordFrequency ul li:hover {
+  background-color: rgba(96, 158, 191, 0.47);
+}
+.wordFrequency ul li .textLeft,
+.wordFrequency ul li .textRight,
+.wordFrequency ul li .textMiddle {
+  font-size: calc(23vw/var(--rw));
+}
+.wordFrequency ul li .textLeft {
+  width: calc(80vw/var(--rw));
+  margin-left: calc(20vw/var(--rw));
+}
+.wordFrequency ul li .textMiddle {
+  width: calc(140vw/var(--rw));
+}
+.wordFrequency ul li .textRight {
+  width: calc(90vw/var(--rw));
+}
+.wordFrequency ul::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+  background-color: #141313;
+}
+.wordFrequency ul::-webkit-scrollbar {
+  width: 6px;
+  background-color: #141313;
+}
+.wordFrequency ul::-webkit-scrollbar-thumb {
+  height: 20px;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, #7d7e80), color-stop(0.4, #616263), color-stop(0.8, #7d7e80));
+}
+.textAnalyse,
+.analyse {
+  position: absolute;
+  right: calc(-600vw/var(--rw));
+}
+.textAnalyse.active,
+.analyse.active {
+  position: static;
+}
+.colorSvg {
+  position: absolute;
+}

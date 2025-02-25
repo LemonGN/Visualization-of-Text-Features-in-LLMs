@@ -1,0 +1,55 @@
+
+* {
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  color:#333;
+  font-weight: 400;
+  font-size: 16px; 
+  box-sizing: border-box;
+  background-size: cover;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+  padding: 0; 
+  /* 可能优先级不够 */
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+} 
+
+input {
+  border: none;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  outline: none;
+  border: none;   
+}
+
+i {
+  font-style:normal;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+/* 
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   
+   注意 *{} 那里调节bgs, 这里会影响img导入的SVG 
+} */

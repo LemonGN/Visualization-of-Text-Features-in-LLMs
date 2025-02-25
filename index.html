@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>不同作者文学作品文本特征分析</title>
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="./bootstrap-5.3.0-alpha1-dist/css/bootstrap.css">
+  <script src="./bootstrap-5.3.0-alpha1-dist/js/bootstrap.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" crossorigin="" href="https://font.kivo.wiki/Blueaka_Bold/Blueaka_Bold.css">
+  <link rel="stylesheet" href="./css/init.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="./js/d3.min.js"></script>
+  <script src="./js/lodash.js"></script>
+  <script src="./js/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+
+
+</head>
+
+<body>
+  <div id="app">
+    <svg @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseDrag" class="mainSvg"></svg>
+    <div class="left">
+      <div class="box filter" @click.stop="displayTitle3=!displayTitle3">
+        <div class="whiteBorder">
+          <div class="blueBorder">
+            <div class="title family1" v-if="displayTitle3">
+              过滤器与选择
+            </div>
+            <div class="content" v-else>
+              <p class="family1">选择作者</p>
+              <div class="buttons size">
+                <button v-for="(item, index) in authorArr" @click.stop="switchAuthorButton(index)"
+                  :class="[{'active':Boolean(authorOptionState[index])}]">
+                  {{item}}
+                </button>
+              </div>
+              <p class="family1">选择题材</p>
+              <div class="buttons size">
+                <button v-for="(item, index) in ti2caiArr" @click.stop="switchTi2caiButton(index)"
+                  :class="[{'active':Boolean(ti2caiOptionState[index])}]">
+                  {{item}}
+                </button>
+              </div>
+              <p class="family1">选择体裁</p>
+              <div class="buttons size">
+                <button v-for="(item, index) in ti3caiArr" @click.stop="switchTi3caiButton(index)"
+                  :class="[{'active':Boolean(ti3caiOptionState[index])}]">
+                  {{item}}
+                </button>
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置非高亮数据点透明度</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名称" @click.stop=""
+                  v-model="noFocusOpacity">
+              </div>
+              <ul>
+                <li class="family1">选择功能</li>
+              </ul>
+              <div class="buttons size">
+                <button @click.stop="selectFocused(true)">
+                  选择高亮
+                </button>
+                <button @click.stop="selectFocused(false)">
+                  取消高亮
+                </button>
+                <button @click.stop="selectall(false)" class="deleteAll">
+                  全部取消
+                </button>
+                <button @click.stop="selectall(true)">
+                  全部选择
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box legend" @click.stop="displayTitle1=!displayTitle1">
+        <div class="whiteBorder">
+          <div class="blueBorder">
+            <div class="title family1" v-if="displayTitle1">
+              图例与基本设置
+            </div>
+            <div class="content" v-else>
+              <p class="family1">调整对联大小 (刷新页面)</p>  
+              <div class="buttons size">
+                <button class="family1" @click.stop="changeCoupleSize(-1)">-</button>  
+                <button class="family1" @click.stop="changeCoupleSize(1)">+</button>  
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置数据点基础大小</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名称" @click.stop="" v-model="size">
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置数据点选框粗细</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名称" @click.stop="" v-model="borderSize">
+              </div>
+              <!-- <div class="form-group family1">
+                <label for="name">设置节流周期时长(ms)</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名称" @click.stop="" v-model="throttleTime">        
+              </div> -->
+              <p class="family1">颜色表示</p>
+              <div class="buttons color">
+                <button v-for="(item, index) in colorOption" @click.stop="switchColorButton(index)"
+                  :class="[{'active':colorOptionState[index]}]">
+                  {{item}}
+                </button>
+              </div>
+              <div class="legend">
+                <ul>
+                  <li v-for="(item, index) in colorLegendTxtArr">
+                    <div class="colorBox" :style="{'background-color' : colorLegendColorArr[index]}"></div>
+                    <div class="txt">{{ item }}</div>
+                  </li>
+                </ul>
+              </div>
+              <p class="family1">大小表示</p>
+              <div class="buttons size">
+                <button v-for="(item, index) in sizeOption" @click.stop="switchSizeButton(index)"
+                  :class="[{'active':sizeOptionState[index]}]">
+                  {{item}}
+                </button>
+              </div>
+              <div class="legend">
+                <ul>
+                  <li v-for="(item, index) in sizeLegendTxtArr">
+                    <div class="pointBox"
+                      :style="{'height':2*sizeLegendPointArr[index]+'px', 'width':2*sizeLegendPointArr[index]+'px'}">
+                    </div>
+                    <div class="txt">{{ item }}</div>
+                  </li>
+                </ul>
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置最小缩放倍率</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入" @click.stop="" v-model="sizeMinScale">
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置最大缩放倍率</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入" @click.stop="" v-model="sizeMaxScale">
+              </div>
+              <div class="form-group family1">
+                <label for="name">设置文章标题透明度</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入" @click.stop="" v-model="titleOpacity">
+              </div>
+              <p class="family1">标题颜色</p>
+              <div class="buttons color">
+                <button @click.stop="switchTitleColor('white')" :class="[{'active':titleColor=='white'}]">
+                  白
+                </button>
+                <button @click.stop="switchTitleColor('black')" :class="[{'active':titleColor=='black'}]">
+                  黑
+                </button>
+                <button @click.stop="switchTitleColor('transparent')" :class="[{'active':titleColor=='transparent'}]">
+                  无
+                </button>
+                <button @click.stop="switchTitleColor('follow')" :class="[{'active':titleColor=='follow'}]">
+                  跟随
+                </button>
+              </div>
+              <ul>
+                <li class="family1">
+                  (点击该窗口任意位置可以收起)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+    <div class="right">
+      <div class="box overview" @click.stop="clickOverview">
+        <div class="whiteBorder">
+          <div class="blueBorder ">
+            <!-- 此处不用v-if是因为相当于直接删除了节点，导致关闭后不能再现概览图 -->
+            <div class="title family1" v-show="displayTitle2">
+              全览
+            </div>
+            <div class="content blackBGC" v-show="!displayTitle2">
+              <div class="innerOverview ">
+                <svg class="overviewSvg"></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        :class="[{'analyse':true}, {'box':true}, {'active':showAnalyseFlag}]" 
+        @click.stop="displayTitle4=!displayTitle4" 
+      >
+        <div class="whiteBorder">
+          <div class="blueBorder">
+            <div class="title family1" v-show="displayTitle4">
+              不同作者文章特征分析面板
+            </div>
+            <div class="content" v-show="!displayTitle4">  
+              <!-- 渐变 -->
+              <svg height="0" width="400" class="colorSvg"> 
+                <defs>
+                  <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgb(86, 145, 255);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgb(201, 147, 255);stop-opacity:1" />
+                  </linearGradient>
+                </defs> 
+              </svg>
+              <!-- 直方图画布 -->
+              <svg 
+                class="histogram"  
+                @click.stop="txtAnalyseMagnifyFlag = !txtAnalyseMagnifyFlag" @mouseleave="txtAnalyseMagnifyFlag = false" 
+              ></svg>
+              <!-- 直方图按钮 -->
+              <div class="buttons color">
+                <button 
+                  v-for="item in attrForZhiFangTu.length" 
+                  @click.stop="switchAttrForHistogram(attrForZhiFangTu[item - 1])"
+                  :class="[{'active' : currentAttrForHistogram == attrForZhiFangTu[item - 1]}]" 
+                >  
+                  {{ attrForZhiFangTuInChinese[item - 1] }}  
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box wordFrequency" @click.stop="displayTitle6=!displayTitle6" v-show="showAnalyseFlag"> 
+        <div class="whiteBorder">
+          <div class="blueBorder">
+            <div class="title family1" v-show="displayTitle6">
+              词频统计
+            </div>
+            <div class="content" v-show="!displayTitle6">   
+              <ul>
+                <li v-for="(item, index) in wordFrequencyArr" class="family1" @click.stop="clickWordItem(item[0])">    
+                  <div class="textLeft">第{{index + 1}}</div> 
+                  <div class="textMiddle">{{item[0]}}</div>
+                  <div class="textRight">{{item[1]}}</div>  
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div :class="[{'textAnalyse':true}, {'box':true}, {'active':showAnalyseFlag}]"  
+        @click.stop="displayTitle5=!displayTitle5" 
+      > 
+        <div class="whiteBorder">
+          <div class="blueBorder">
+            <div class="title family1" v-show="displayTitle5">
+              文章分析面板 
+            </div>
+            <div class="content base" v-show="!displayTitle5" :class="[{'active': txtAnalyseMagnifyFlag}]">  
+              <svg 
+                class="themeRiver"  
+                @click.stop="txtAnalyseMagnifyFlag = !txtAnalyseMagnifyFlag" @mouseleave="txtAnalyseMagnifyFlag = false" 
+              ></svg>
+              <p class="family1">选择展示的不同文本的属性</p> 
+              <div class="buttons size">
+                <button @click.stop="changeAttrForRiver('sentencesLen')" :class="[{'active': currentAttrForRiver == 'sentencesLen'}, {'family1': true}]">句子长度</button>  
+                <button @click.stop="changeAttrForRiver('sensPerSen')" :class="[{'active': currentAttrForRiver == 'sensPerSen'}, {'family1': true}]">情感指数</button>  
+              </div>
+              <div class="legend">
+                <ul>
+                  <li v-for="(item, index) in colorLegendTxtArrForRiver">
+                    <div class="colorBox" :style="{'background-color' : colorLegendColorArrForRiver[index]}"></div>
+                    <div class="txt">{{ item }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="box card" v-show="cardDisplayFlag">       
+      <div class="whiteBorder">
+        <div class="blueBorder">
+          <div class="content">
+            <p class="family1 textTitle">这里是题目</p>   
+            <svg class="cloud"></svg>
+            <p class="family1 textAuthor">作者: <span>111</span></p>
+            <p class="family1 textTi2cai">题材: <span>222</span></p>
+            <p class="family1 textTi3cai">体裁: <span>333</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="./js/index.js"></script>
+</body>
+
+</html>
